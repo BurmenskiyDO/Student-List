@@ -1,3 +1,5 @@
+"""Модуль с pydantic-моделями для манипуляций с данными студентов"""
+
 from datetime import date
 from typing import Optional
 
@@ -6,7 +8,7 @@ from pydantic import BaseModel, ConfigDict
 from models import StudentStatus, StudentGrade
 
 from schemas.ContactInfo import ContactInfoRead
-from schemas.Grades import GradeRead
+from schemas.Grade import GradeRead
 
 
 class StudentCreate(BaseModel):
@@ -57,11 +59,11 @@ class StudentDelete(BaseModel):
 
 class StudentFilter(BaseModel):
     last_name: Optional[str] = None
-    score_threshold: Optional[StudentGrade] = None
+    score_present: Optional[StudentGrade] = None
     born_before: Optional[date] = None
     born_after: Optional[date] = None
     group: Optional[str] = None
     has_email: Optional[bool] = None
 
     limit: int = 10
-    offset: int = 10
+    offset: int = 0
