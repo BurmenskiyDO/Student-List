@@ -3,7 +3,9 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 
+LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "app.log")
+os.makedirs(LOG_DIR, exist_ok=True)
 
 formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
