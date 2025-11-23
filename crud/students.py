@@ -39,7 +39,6 @@ async def create_student(session: AsyncSession, data: StudentCreate) -> StudentR
 
         contact_dict = ContactInfoRead.model_validate(student.contact).model_dump(exclude_none=True)
 
-
         student_read_dict = data.model_dump(exclude={"contact"}, exclude_none=True)
         student_read_dict.update({
             "id": student.id,
@@ -129,14 +128,14 @@ async def update_student_info(session: AsyncSession, student_id: int,
         if not student:
             students_logger.info(f"Student with id={student_id} not found")
             return None
-        update_data = data.model_dump(exclude_none=True)
+        update_data = data.model_dump(exclude_unset=True)
 
-        #Обновление всех полей кроме вложенного contact
+        # Обновление всех полей кроме вложенного contact
         for key, value in update_data.items():
             if key != "contact":
                 setattr(student, key, value)
 
-        #Обновление полей из contact
+        # Обновление полей из contact
         if "contact" in update_data:
             contact_data = update_data["contact"]
             if student.contact is None:
@@ -174,7 +173,7 @@ async def get_students_filtered(session: AsyncSession, filters: StudentFilter) -
     """
     students_logger.info(f"Filtering students with filters=[{filters}]")
 
-    #Сбор всех условий для фильтрации в список
+    # Сбор всех условий для фильтрации в список
     filter_conditions = []
     if filters.born_after is not None:
         filter_conditions.append(Student.birth_date > filters.born_after)
@@ -195,10 +194,10 @@ async def get_students_filtered(session: AsyncSession, filters: StudentFilter) -
 
     try:
         query = select(Student).options(joinedload(Student.grades))
-        #При наличии фильтров, добавить их в запрос
+        # При наличии фильтров, добавить их в запрос
         if filter_conditions:
             query = query.where(*filter_conditions)
-        #Пагинация - при отсутствии переданных параметров, будут установлены по умолчанию из модели filters
+        # Пагинация - при отсутствии переданных параметров, будут установлены по умолчанию из модели filters
         query = query.offset(filters.offset).limit(filters.limit)
 
         result = await session.execute(query)

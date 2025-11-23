@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: faculty-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  init-db:
+    build: .
+    command: python init_db.py
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_DB: ${PG_DB}
+    restart: "no"
+  app:
+    build: .
+    container_name: faculty-fastapi
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_DB: ${PG_DB}
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

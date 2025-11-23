@@ -26,6 +26,7 @@ from schemas.Student import StudentCreate, StudentRead, StudentUpdate, StudentFi
 
 app = FastAPI()
 
+
 @app.post("/students/add", response_model=StudentRead, status_code=status.HTTP_201_CREATED)
 async def add_student(data: StudentCreate, session: AsyncSession = Depends(get_session)):
     return await create_student(session, data)
@@ -53,8 +54,8 @@ async def update_student(student_id: int, data: StudentUpdate, session: AsyncSes
     return student
 
 
-@app.post("/students/filter", response_model=List[StudentRead], status_code=status.HTTP_200_OK)
-async def filter_students(filters: StudentFilter, session: AsyncSession = Depends(get_session)):
+@app.get("/students/filter", response_model=List[StudentRead], status_code=status.HTTP_200_OK)
+async def filter_students(filters: StudentFilter = Depends(), session: AsyncSession = Depends(get_session)):
     students = await get_students_filtered(session, filters)
     return students
 
@@ -68,7 +69,7 @@ async def add_grade(data: GradeCreate, session: AsyncSession = Depends(get_sessi
     return grade
 
 
-@app.post("/grades/delete/{grade_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/grades/delete/{grade_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def remove_grade(grade_id: int, session: AsyncSession = Depends(get_session)):
     deleted = await delete_grade(session, grade_id)
     if not deleted:

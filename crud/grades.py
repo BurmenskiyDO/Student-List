@@ -25,19 +25,19 @@ async def create_grade(session: AsyncSession, data: GradeCreate) -> GradeRead | 
         Returns:
             GradeRead: Объект созданной оценки с присвоенным ID
             bool: False — если студент не найден или оценка по предмету уже существует
-        """
+    """
     grades_logger.info(f"Creating grade for student_id={data.student_id},"
                        f" course={data.course_name}, grade = {data.score}")
 
     student = await session.execute(select(Student.id).where(Student.id == data.student_id))
 
-    #Есть ли студент
+    # Есть ли студент
     if student.scalars().first() is None:
         grades_logger.warning(f"Student with id={data.student_id} not found, cannot create grade")
         return False
     existing_grade = await session.execute(select(Grade.id).where(Grade.student_id == data.student_id,
                                                                   Grade.course_name == data.course_name))
-    #Если оценка по предмету существует - не добавлять
+    # Если оценка по предмету существует - не добавлять
     if existing_grade.scalars().one_or_none() is not None:
         grades_logger.warning(f"Grade for student_id={data.student_id},"
                               f" course={data.course_name} already exists")
@@ -63,11 +63,24 @@ async def create_grade(session: AsyncSession, data: GradeCreate) -> GradeRead | 
 
 
 async def delete_grade(session: AsyncSession, grade_id: int) -> bool:
+    """
+            Создаёт новую оценку для студента по конкретному предмету.
+
+            Args:
+                session: Асинхронная сессия SQLAlchemy
+                grade_id: Идентификатор по которому удаляется студент
+
+            Returns:
+                bool: True - если оценка удалена
+                bool: False — если оценка не найдена
+    """
     grades_logger.info(f"Deleting grade with id={grade_id}")
     try:
+
         result = await session.execute(select(Grade).where(Grade.id == grade_id))
         grade = result.scalar_one_or_none()
 
+        # Если оценка в базе не нашлась
         if not grade:
             grades_logger.warning(f"Grade with id={grade_id} not found")
             return False

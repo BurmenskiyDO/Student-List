@@ -8,3 +8,10 @@ class ContactInfoRead(BaseModel):
     phone: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ContactInfoUpdate(BaseModel):
+    email: Optional[str] = None
+    phone: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)

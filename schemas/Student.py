@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict
 
 from models import StudentStatus, StudentGrade
 
-from schemas.ContactInfo import ContactInfoRead
+from schemas.ContactInfo import ContactInfoRead, ContactInfoUpdate
 from schemas.Grade import GradeRead
 
 
@@ -46,7 +46,7 @@ class StudentUpdate(BaseModel):
     status: Optional[StudentStatus] = None
     group: Optional[str] = None
 
-    contact: Optional[ContactInfoRead] = None
+    contact: Optional[ContactInfoUpdate] = None
 
     model_config = ConfigDict(from_attributes=True)
 
