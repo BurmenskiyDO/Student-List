@@ -6,8 +6,8 @@ from sqlalchemy.orm import joinedload, selectinload
 
 from exceptions import DatabaseError
 from models import StudentStatus, Student, ContactInfo, Grade
-from schemas.ContactInfo import ContactInfoRead
-from schemas.Student import StudentCreate, StudentRead, StudentUpdate, StudentFilter
+from schemas.contact_info import ContactInfoRead
+from schemas.student import StudentCreate, StudentRead, StudentUpdate, StudentFilter
 
 from log.logger import students_logger
 

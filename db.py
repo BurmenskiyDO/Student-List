@@ -42,15 +42,7 @@ def get_sync_engine():
     return create_engine(settings.get_db_url())
 
 
-# def get_async_engine():
-#     return create_async_engine(settings.get_async_db_url())
-# def get_async_sessionmaker():
-#     return async_sessionmaker(get_async_engine(), expire_on_commit=False)
-#
-# async def get_session():
-#     async_session = get_async_sessionmaker()
-#     async with async_session() as session:
-#         yield session
+
 
 
 sync_engine: Engine = create_engine(settings.get_db_url(), echo=False)

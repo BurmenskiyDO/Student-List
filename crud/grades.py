@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from exceptions import DatabaseError
 from models import Grade, Student
-from schemas.Grade import GradeCreate, GradeRead
+from schemas.grade import GradeCreate, GradeRead
 
 from log.logger import grades_logger
 

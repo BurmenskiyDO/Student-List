@@ -21,8 +21,8 @@ from crud.students import create_student, delete_student, delete_students_by_sta
 
 from db import get_session
 from models import StudentStatus
-from schemas.Grade import GradeCreate, GradeRead
-from schemas.Student import StudentCreate, StudentRead, StudentUpdate, StudentFilter
+from schemas.grade import GradeCreate, GradeRead
+from schemas.student import StudentCreate, StudentRead, StudentUpdate, StudentFilter
 
 app = FastAPI()
 

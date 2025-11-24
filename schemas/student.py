@@ -7,8 +7,8 @@ from pydantic import BaseModel, ConfigDict
 
 from models import StudentStatus, StudentGrade
 
-from schemas.ContactInfo import ContactInfoRead, ContactInfoUpdate
-from schemas.Grade import GradeRead
+from schemas.contact_info import ContactInfoRead, ContactInfoUpdate
+from schemas.grade import GradeRead
 
 
 class StudentCreate(BaseModel):
