@@ -25,8 +25,7 @@
 Удалить оценку  
 `DELETE /grades/delete/{grade_id}`
 
-Для запуска выполнить:
+Для запуска переименовать .env и выполнить:
 ```
-docker compose exec app python init_db.py
 docker compose up -d --build
 ```
